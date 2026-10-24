@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Farhan Rahman – Resume</title>
+  <meta name="description" content="Personal resume website of Farhan Rahman.">
+
+  <!-- Optional nice font. If it fails to load, the page still works with a backup font. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============ COLORS (you can change these) ============ */
+    :root {
+      --bg: #f6f3ec;
+      --surface: #ffffff;
+      --text: #1d2a2e;
+      --muted: #5b6a6f;
+      --accent: #1b6b6f;
+      --accent-soft: #d9ecea;
+      --line: #ddd7ca;
+      --shadow: 0 10px 30px rgba(29, 42, 46, 0.08);
+      --display: "Fraunces", Georgia, "Times New Roman", serif;
+      --body: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0f1719;
+        --surface: #172326;
+        --text: #eaf0ee;
+        --muted: #9fb1b3;
+        --accent: #5cc4c0;
+        --accent-soft: #1e3a3b;
+        --line: #2a3b3e;
+        --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      }
+    }
+
+    /* ============ BASICS ============ */
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--body);
+      line-height: 1.65;
+      font-size: 1.05rem;
+    }
+    h1, h2, h3 { font-family: var(--display); line-height: 1.15; margin: 0; }
+    a { color: var(--accent); }
+    a:focus-visible, button:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 3px;
+    }
+    .wrap { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+
+    /* ============ TOP MENU ============ */
+    .topbar {
+      position: sticky; top: 0; z-index: 10;
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--line);
+    }
+    .topbar .wrap {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 60px;
+    }
+    .brand { font-family: var(--display); font-weight: 700; text-decoration: none; color: var(--text); }
+    .topbar nav { display: flex; gap: 20px; }
+    .topbar nav a {
+      text-decoration: none; color: var(--muted); font-size: 0.95rem;
+      padding: 4px 2px; border-bottom: 2px solid transparent;
+    }
+    .topbar nav a:hover { color: var(--text); border-color: var(--accent); }
+
+    /* ============ HERO (photo left, name right) ============ */
+    .hero { padding: 72px 0 40px; }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(240px, 380px) 1fr;
+      gap: 56px;
+      align-items: center;
+    }
+    .photo-frame { position: relative; }
+    .photo-frame::before {
+      content: "";
+      position: absolute; inset: 18px -18px -18px 18px;
+      background: var(--accent-soft);
+      border-radius: 999px 999px 28px 28px;
+      z-index: 0;
+    }
+    .photo-frame img, .photo-fallback {
+      position: relative; z-index: 1;
+      display: block; width: 100%;
+      aspect-ratio: 4 / 5; object-fit: cover;
+      border-radius: 999px 999px 28px 28px;
+      box-shadow: var(--shadow);
+    }
+    .photo-fallback {
+      display: none;
+      align-items: center; justify-content: center;
+      background: var(--accent); color: #fff;
+      font-family: var(--display); font-size: 5rem;
+    }
+    .hero h1 {
+      font-size: clamp(2.8rem, 7vw, 5.2rem);
+      letter-spacing: -0.02em;
+    }
+    .hero .role {
+      margin: 12px 0 0; color: var(--accent);
+      font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; font-size: 0.9rem;
+    }
+    .about { margin-top: 28px; max-width: 52ch; }
+    .about h2 { font-size: 1.2rem; margin-bottom: 8px; }
+    .about p { margin: 0 0 12px; color: var(--muted); }
+    .contact { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
+    .btn {
+      display: inline-block; padding: 10px 20px; border-radius: 999px;
+      text-decoration: none; font-weight: 600; font-size: 0.95rem;
+      border: 2px solid var(--accent);
+    }
+    .btn.primary { background: var(--accent); color: var(--bg); }
+    .btn.ghost { color: var(--accent); }
+    .btn:hover { transform: translateY(-2px); }
+    .btn { transition: transform 0.2s ease; }
+
+    /* ============ SECTIONS ============ */
+    section.block { padding: 72px 0 24px; }
+    .eyebrow {
+      color: var(--accent); font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; font-size: 0.8rem; margin-bottom: 8px;
+    }
+    section.block > .wrap > h2 { font-size: clamp(1.9rem, 4vw, 2.6rem); margin-bottom: 28px; }
+
+    /* ============ EDUCATION TABS ============ */
+    .tabs { display: inline-flex; gap: 6px; padding: 6px; background: var(--surface);
+      border: 1px solid var(--line); border-radius: 999px; margin-bottom: 24px; }
+    .tab {
+      border: 0; background: transparent; color: var(--muted);
+      font: inherit; font-weight: 600; padding: 10px 22px; border-radius: 999px; cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+    .tab[aria-selected="true"] { background: var(--accent); color: var(--bg); }
+    .tab-panel[hidden] { display: none; }
+    .card {
+      background: var(--surface); border: 1px solid var(--line);
+      border-radius: 20px; padding: 28px; box-shadow: var(--shadow);
+    }
+    .card + .card { margin-top: 16px; }
+    .card h3 { font-size: 1.4rem; }
+    .card .meta { color: var(--muted); margin: 6px 0 14px; font-size: 0.95rem; }
+    .card ul { margin: 0; padding-left: 20px; color: var(--muted); }
+    .card li + li { margin-top: 4px; }
+    .tab-panel:not([hidden]) { animation: fadeUp 0.35s ease; }
+
+    /* ============ SKILLS ============ */
+    .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+    .chip {
+      border: 1px solid var(--line); background: var(--surface); color: var(--text);
+      font: inherit; font-size: 0.95rem; padding: 8px 18px; border-radius: 999px; cursor: pointer;
+    }
+    .chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+    .skill-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; align-items: start; }
+    .skill {
+      background: var(--surface); border: 1px solid var(--line);
+      border-radius: 18px; padding: 22px 24px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .skill:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+    .skill[hidden] { display: none; }
+    .skill .top { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 10px; }
+    .skill h3 { font-size: 1.2rem; }
+    .level {
+      flex: none; background: var(--accent-soft); color: var(--accent);
+      font-size: 0.78rem; font-weight: 700; letter-spacing: 0.04em;
+      padding: 4px 12px; border-radius: 999px;
+    }
+    .skill .desc { margin: 0; color: var(--muted); font-size: 0.98rem; }
+    .certs { margin-top: 16px; padding-top: 14px; border-top: 1px dashed var(--line); }
+    .certs-title {
+      margin: 0 0 8px; font-size: 0.75rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+    }
+    .certs ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+    .certs a {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none; color: var(--text); font-size: 0.93rem;
+      border: 1px solid var(--line); border-radius: 12px; padding: 8px 12px;
+    }
+    .certs a::before {
+      content: "\2713"; flex: none; width: 22px; height: 22px; border-radius: 50%;
+      background: var(--accent); color: var(--bg); font-size: 0.8rem; font-weight: 700;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .certs a:hover { border-color: var(--accent); }
+    .cert-empty { margin: 0; color: var(--muted); font-size: 0.9rem; font-style: italic; }
+
+    /* ============ EXPERIENCE (click to open) ============ */
+    .timeline { position: relative; padding-left: 28px; }
+    .timeline::before {
+      content: ""; position: absolute; left: 7px; top: 8px; bottom: 8px;
+      width: 2px; background: var(--line);
+    }
+    .job { position: relative; margin-bottom: 16px; }
+    .job::before {
+      content: ""; position: absolute; left: -28px; top: 26px;
+      width: 16px; height: 16px; border-radius: 50%;
+      background: var(--bg); border: 3px solid var(--accent);
+    }
+    .job-head {
+      width: 100%; text-align: left; font: inherit; color: inherit;
+      background: var(--surface); border: 1px solid var(--line);
+      border-radius: 16px; padding: 18px 22px; cursor: pointer;
+      display: flex; justify-content: space-between; align-items: center; gap: 16px;
+    }
+    .job-head:hover { border-color: var(--accent); }
+    .job-head strong { display: block; font-family: var(--display); font-size: 1.2rem; }
+    .job-head small { color: var(--muted); font-size: 0.92rem; }
+    .arrow { flex: none; transition: transform 0.25s ease; font-size: 1.4rem; color: var(--accent); }
+    .job.open .arrow { transform: rotate(180deg); }
+    .job-body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.3s ease; }
+    .job.open .job-body { grid-template-rows: 1fr; }
+    .job-inner { overflow: hidden; visibility: hidden; }
+    .job.open .job-inner { visibility: visible; }
+    .job-inner ul { margin: 0; padding: 14px 22px 8px 42px; color: var(--muted); }
+    .job-inner li + li { margin-top: 4px; }
+
+    /* ============ FOOTER ============ */
+    footer { margin-top: 80px; padding: 32px 0 48px; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.92rem; }
+
+    /* ============ SCROLL ANIMATION ============ */
+    .js .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .js .reveal.in { opacity: 1; transform: none; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      * { transition: none !important; animation: none !important; }
+      .js .reveal { opacity: 1; transform: none; }
+    }
+
+    /* ============ PHONES ============ */
+    @media (max-width: 760px) {
+      .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+      .photo-frame { max-width: 300px; margin: 0 auto; width: 100%; }
+      .topbar nav { gap: 12px; }
+      .topbar nav a { font-size: 0.85rem; }
+      .brand { display: none; }
+      .topbar .wrap { justify-content: center; }
+    }
+  </style>
+</head>
+
+<body>
+  <script>document.documentElement.classList.add("js");</script>
+
+  <!-- ============ TOP MENU ============ -->
+  <header class="topbar">
+    <div class="wrap">
+      <a class="brand" href="#top">Farhan Rahman</a>
+      <nav aria-label="Sections">
+        <a href="#about">About</a>
+        <a href="#education">Education</a>
+        <a href="#skills">Skills</a>
+        <a href="#experience">Experience</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <!-- ====================================================== -->
+    <!-- 1. HERO: photo on the left, name + about me on the right -->
+    <!-- ====================================================== -->
+    <section class="hero" id="about">
+      <div class="wrap hero-grid">
+
+        <div class="photo-frame">
+          <!-- YOUR PHOTO: save your picture as photo.jpg and upload it next to index.html -->
+          <img src="photo.jpg" alt="Portrait of Farhan Rahman"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="photo-fallback" aria-hidden="true">FR</div>
+        </div>
+
+        <div>
+          <h1>Farhan Rahman</h1>
+          <p class="role">Your title here, e.g. Student · Aspiring Developer</p>
+
+          <div class="about">
+            <h2>About me</h2>
+            <!-- EDIT: write your own story in these paragraphs -->
+            <p>I am a young man learning ways to grow and build a good future. Replace this with 2 or 3 sentences about who you are.</p>
+            <p>Add what you are good at, what you enjoy, and what kind of work or opportunities you are looking for.</p>
+          </div>
+
+          <div class="contact">
+            <!-- EDIT: put your real email and links -->
+            <a class="btn primary" href="mailto:farhanwork6001@gmail.com">Email me</a>
+            <a class="btn ghost" href="https://www.linkedin.com/in/fn-rahman" target="_blank" rel="noopener">My LinkedIn</a>
+            <a class="btn ghost" href="https://github.com/FarhanRahman-me" target="_blank" rel="noopener">My GitHub</a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ====================================================== -->
+    <!-- 2. EDUCATION: two tabs, College and University          -->
+    <!-- ====================================================== -->
+    <section class="block" id="education">
+      <div class="wrap reveal">
+        <div class="eyebrow">Learning</div>
+        <h2>Education</h2>
+
+        <div class="tabs" role="tablist" aria-label="Education level">
+          <button class="tab" role="tab" id="tab-college" aria-selected="true" aria-controls="panel-college">College</button>
+          <button class="tab" role="tab" id="tab-uni" aria-selected="false" aria-controls="panel-uni" tabindex="-1">University</button>
+        </div>
+
+        <!-- COLLEGE -->
+        <div class="tab-panel" role="tabpanel" id="panel-college" aria-labelledby="tab-college">
+          <div class="card">
+            <h3>Willes Little Flower School and College</h3>
+            <p class="meta">Business Studies · 2022 – 2024</p>
+            <ul>
+              <li>GPA: 3.56</li>
+              <li>Excelled in Accounting and English</li>
+              <li>Part of English literature club</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- UNIVERSITY -->
+        <div class="tab-panel" role="tabpanel" id="panel-uni" aria-labelledby="tab-uni" hidden>
+          <div class="card">
+            <h3>East West University</h3>
+            <p class="meta">Department of Business Administration · 2025 – Present</p>
+            <ul>
+              <li>Mainly studying accounting as a major</li>
+              <li>Received the Merit Scholarship</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================== -->
+    <!-- 3. SKILLS: filter buttons + bars                        -->
+    <!-- ====================================================== -->
+    <section class="block" id="skills">
+      <div class="wrap reveal">
+        <div class="eyebrow">What I can do</div>
+        <h2>Skills</h2>
+
+        <div class="filters" role="group" aria-label="Filter skills">
+          <button class="chip" data-filter="all" aria-pressed="true">All</button>
+          <button class="chip" data-filter="technical" aria-pressed="false">Technical</button>
+          <button class="chip" data-filter="personal" aria-pressed="false">Personal</button>
+          <button class="chip" data-filter="languages" aria-pressed="false">Languages</button>
+        </div>
+
+        <div class="skill-grid">
+          <!--
+            EDIT A SKILL: change the name, the level word (top right), and the description.
+            data-cat must be one of: technical, personal, languages
+            To add a skill, copy one whole <article class="skill"> ... </article> block.
+
+            CERTIFICATES: upload your certificate file (PDF or photo) to GitHub next to index.html,
+            then put its exact file name in href="...". Use file names with NO spaces,
+            for example: web-design-certificate.pdf
+            To add another certificate, copy one <li>...</li> line.
+            No certificate yet? Use the line:  <p class="cert-empty">No certificate yet</p>
+          -->
+
+          <article class="skill" data-cat="technical">
+            <div class="top"><h3>Skill one</h3><span class="level">Intermediate</span></div>
+            <p class="desc">Describe what you can actually do with this skill. For example: "I can build simple websites and fix common problems. I learned it through an online course and two small projects."</p>
+            <div class="certs">
+              <p class="certs-title">Certificates</p>
+              <ul>
+                <li><a href="certificate-one.pdf" target="_blank" rel="noopener">Certificate name, Issuer, 2025</a></li>
+                <li><a href="certificate-two.pdf" target="_blank" rel="noopener">Another certificate, Issuer, 2024</a></li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="skill" data-cat="technical">
+            <div class="top"><h3>Skill two</h3><span class="level">Beginner</span></div>
+            <p class="desc">Say what you have done with it, how long you have practiced, and what you want to learn next.</p>
+            <div class="certs">
+              <p class="certs-title">Certificates</p>
+              <p class="cert-empty">No certificate yet</p>
+            </div>
+          </article>
+
+          <article class="skill" data-cat="personal">
+            <div class="top"><h3>Teamwork</h3><span class="level">Strong</span></div>
+            <p class="desc">Give a real example: a group project, a team, or a club where you worked with others and what the result was.</p>
+            <div class="certs">
+              <p class="certs-title">Certificates</p>
+              <p class="cert-empty">No certificate yet</p>
+            </div>
+          </article>
+
+          <article class="skill" data-cat="personal">
+            <div class="top"><h3>Problem solving</h3><span class="level">Strong</span></div>
+            <p class="desc">Describe a problem you solved and how you did it, even a small one.</p>
+            <div class="certs">
+              <p class="certs-title">Certificates</p>
+              <p class="cert-empty">No certificate yet</p>
+            </div>
+          </article>
+
+          <article class="skill" data-cat="languages">
+            <div class="top"><h3>Bangla</h3><span class="level">Native</span></div>
+            <p class="desc">Mother tongue. Fluent in speaking, reading and writing.</p>
+            <div class="certs">
+              <p class="certs-title">Certificates</p>
+              <p class="cert-empty">Not needed for a native language</p>
+            </div>
+          </article>
+
+          <article class="skill" data-cat="languages">
+            <div class="top"><h3>English</h3><span class="level">Fluent</span></div>
+            <p class="desc">Describe how you use English: studying, reading, writing, speaking with others.</p>
+            <div class="certs">
+              <p class="certs-title">Certificates</p>
+              <ul>
+                <li><a href="english-certificate.pdf" target="_blank" rel="noopener">IELTS or other test, score, year</a></li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================== -->
+    <!-- 4. EXPERIENCE: click a job to open it                   -->
+    <!-- ====================================================== -->
+    <section class="block" id="experience">
+      <div class="wrap reveal">
+        <div class="eyebrow">Where I have worked</div>
+        <h2>Experience</h2>
+
+        <div class="timeline">
+          <!-- EDIT a job: change the title, company, dates and bullet points.
+               To add a job, copy one whole <div class="job"> ... </div> block. -->
+
+          <div class="job open">
+            <button class="job-head" aria-expanded="true">
+              <span>
+                <strong>Job title</strong>
+                <small>Company name · 2024 – Present</small>
+              </span>
+              <span class="arrow" aria-hidden="true">⌄</span>
+            </button>
+            <div class="job-body"><div class="job-inner">
+              <ul>
+                <li>Something you did or achieved.</li>
+                <li>Another thing you did or achieved.</li>
+                <li>A result, e.g. “helped 50 customers per day”.</li>
+              </ul>
+            </div></div>
+          </div>
+
+          <div class="job">
+            <button class="job-head" aria-expanded="false">
+              <span>
+                <strong>Previous job or internship</strong>
+                <small>Company name · 2022 – 2024</small>
+              </span>
+              <span class="arrow" aria-hidden="true">⌄</span>
+            </button>
+            <div class="job-body"><div class="job-inner">
+              <ul>
+                <li>Something you did or achieved.</li>
+                <li>Another thing you did or achieved.</li>
+              </ul>
+            </div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="wrap">© <span id="year">2026</span> Farhan Rahman. Built with GitHub Pages.</div>
+  </footer>
+
+  <!-- ============ INTERACTIVITY (no need to edit below) ============ -->
+  <script>
+    // Footer year
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // --- Education tabs (also work with the keyboard arrow keys) ---
+    (function () {
+      var tabs = Array.prototype.slice.call(document.querySelectorAll(".tab"));
+      function select(tab) {
+        tabs.forEach(function (t) {
+          var on = t === tab;
+          t.setAttribute("aria-selected", on ? "true" : "false");
+          t.tabIndex = on ? 0 : -1;
+          document.getElementById(t.getAttribute("aria-controls")).hidden = !on;
+        });
+      }
+      tabs.forEach(function (tab, i) {
+        tab.addEventListener("click", function () { select(tab); });
+        tab.addEventListener("keydown", function (e) {
+          var next = null;
+          if (e.key === "ArrowRight") next = tabs[(i + 1) % tabs.length];
+          if (e.key === "ArrowLeft") next = tabs[(i - 1 + tabs.length) % tabs.length];
+          if (next) { e.preventDefault(); select(next); next.focus(); }
+        });
+      });
+    })();
+
+    // --- Skill filters ---
+    (function () {
+      var chips = document.querySelectorAll(".chip");
+      var skills = document.querySelectorAll(".skill");
+      chips.forEach(function (chip) {
+        chip.addEventListener("click", function () {
+          var f = chip.getAttribute("data-filter");
+          chips.forEach(function (c) { c.setAttribute("aria-pressed", c === chip ? "true" : "false"); });
+          skills.forEach(function (s) {
+            s.hidden = !(f === "all" || s.getAttribute("data-cat") === f);
+          });
+        });
+      });
+    })();
+
+    // --- Experience: open and close ---
+    document.querySelectorAll(".job-head").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var job = btn.parentElement;
+        var open = job.classList.toggle("open");
+        btn.setAttribute("aria-expanded", open ? "true" : "false");
+      });
+    });
+
+    // --- Fade things in as you scroll ---
+    (function () {
+      var targets = document.querySelectorAll(".reveal");
+      if (!("IntersectionObserver" in window)) {
+        targets.forEach(function (el) { el.classList.add("in"); });
+        return;
+      }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("in");
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15 });
+      targets.forEach(function (el) { io.observe(el); });
+    })();
+  </script>
+</body>
+</html>
