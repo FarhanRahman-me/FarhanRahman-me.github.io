@@ -89,14 +89,14 @@
       content: "";
       position: absolute; inset: 18px -18px -18px 18px;
       background: var(--accent-soft);
-      border-radius: 999px 999px 28px 28px;
+      border-radius: 18px;
       z-index: 0;
     }
     .photo-frame img, .photo-fallback {
       position: relative; z-index: 1;
       display: block; width: 100%;
       aspect-ratio: 4 / 5; object-fit: cover;
-      border-radius: 999px 999px 28px 28px;
+      border-radius: 18px;
       box-shadow: var(--shadow);
     }
     .photo-fallback {
@@ -163,7 +163,7 @@
       font: inherit; font-size: 0.95rem; padding: 8px 18px; border-radius: 999px; cursor: pointer;
     }
     .chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--bg); }
-    .skill-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; align-items: start; }
+    .skill-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; align-items: stretch; }
     .skill {
       background: var(--surface); border: 1px solid var(--line);
       border-radius: 18px; padding: 22px 24px;
@@ -185,18 +185,48 @@
       letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
     }
     .certs ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
-    .certs a {
+    .certs a, .dialog-list a {
       display: flex; align-items: center; gap: 10px;
       text-decoration: none; color: var(--text); font-size: 0.93rem;
       border: 1px solid var(--line); border-radius: 12px; padding: 8px 12px;
     }
-    .certs a::before {
+    .certs a::before, .dialog-list a::before {
       content: "\2713"; flex: none; width: 22px; height: 22px; border-radius: 50%;
       background: var(--accent); color: var(--bg); font-size: 0.8rem; font-weight: 700;
       display: inline-flex; align-items: center; justify-content: center;
     }
-    .certs a:hover { border-color: var(--accent); }
+    .certs a:hover, .dialog-list a:hover { border-color: var(--accent); }
     .cert-empty { margin: 0; color: var(--muted); font-size: 0.9rem; font-style: italic; }
+    .skill { display: flex; flex-direction: column; }
+    .skill .desc { flex: 1; }
+    .certs .cert-list { display: none; }
+    .cert-btn {
+      width: 100%; min-height: 44px; display: flex; justify-content: space-between; align-items: center; gap: 10px;
+      font: inherit; font-size: 0.93rem; font-weight: 600; color: var(--accent);
+      background: transparent; border: 1px solid var(--accent); border-radius: 12px;
+      padding: 10px 14px; cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+    .cert-btn:hover { background: var(--accent); color: var(--bg); }
+    .cert-empty { min-height: 44px; display: flex; align-items: center; }
+
+    /* Certificate pop-up */
+    .cert-dialog {
+      border: 1px solid var(--line); border-radius: 20px; padding: 0;
+      background: var(--surface); color: var(--text);
+      width: min(480px, calc(100vw - 32px));
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+    .cert-dialog::backdrop { background: rgba(10, 20, 22, 0.55); }
+    .cert-dialog[open] { animation: fadeUp 0.25s ease; }
+    .dialog-inner { padding: 26px; }
+    .dialog-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 16px; }
+    .dialog-head h3 { font-size: 1.3rem; }
+    .dialog-close {
+      flex: none; width: 36px; height: 36px; border: 0; border-radius: 50%;
+      background: var(--accent-soft); color: var(--accent); font-size: 1.1rem; cursor: pointer;
+    }
+    .dialog-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
 
     /* ============ EXPERIENCE (click to open) ============ */
     .timeline { position: relative; padding-left: 28px; }
@@ -287,14 +317,13 @@
 
         <div>
           <h1>Farhan Rahman</h1>
-          <p class="role">Student · Aspiring CA · Learner </p>
+          <p class="role">Your title here, e.g. Student · Aspiring Developer</p>
 
           <div class="about">
             <h2>About me</h2>
             <!-- EDIT: write your own story in these paragraphs -->
-            <p>I am a young man learning ways to grow and build a good future.
-              Currently pursuing a business degree at East West University and aspiring to become a CA.</p>
-            <p>Aquarist and Gardener with a passion to visit all 64 Districts in Bangladesh.</p>
+            <p>I am a young man learning ways to grow and build a good future. Replace this with 2 or 3 sentences about who you are.</p>
+            <p>Add what you are good at, what you enjoy, and what kind of work or opportunities you are looking for.</p>
           </div>
 
           <div class="contact">
@@ -309,7 +338,7 @@
     </section>
 
     <!-- ====================================================== -->
-    <!-- 2. EDUCATION: two tabs, College and University          -->
+    <!-- 2. EDUCATION: two tabs, University and College          -->
     <!-- ====================================================== -->
     <section class="block" id="education">
       <div class="wrap reveal">
@@ -317,12 +346,24 @@
         <h2>Education</h2>
 
         <div class="tabs" role="tablist" aria-label="Education level">
-          <button class="tab" role="tab" id="tab-college" aria-selected="true" aria-controls="panel-college">College</button>
-          <button class="tab" role="tab" id="tab-uni" aria-selected="false" aria-controls="panel-uni" tabindex="-1">University</button>
+          <button class="tab" role="tab" id="tab-uni" aria-selected="true" aria-controls="panel-uni">University</button>
+          <button class="tab" role="tab" id="tab-college" aria-selected="false" aria-controls="panel-college" tabindex="-1">College</button>
+        </div>
+
+        <!-- UNIVERSITY -->
+        <div class="tab-panel" role="tabpanel" id="panel-uni" aria-labelledby="tab-uni">
+          <div class="card">
+            <h3>East West University</h3>
+            <p class="meta">Department of Business Administration · 2025 – Present</p>
+            <ul>
+              <li>Mainly studying accounting as a major</li>
+              <li>Received the Merit Scholarship</li>
+            </ul>
+          </div>
         </div>
 
         <!-- COLLEGE -->
-        <div class="tab-panel" role="tabpanel" id="panel-college" aria-labelledby="tab-college">
+        <div class="tab-panel" role="tabpanel" id="panel-college" aria-labelledby="tab-college" hidden>
           <div class="card">
             <h3>Willes Little Flower School and College</h3>
             <p class="meta">Business Studies · 2022 – 2024</p>
@@ -333,24 +374,11 @@
             </ul>
           </div>
         </div>
-
-        <!-- UNIVERSITY -->
-        <div class="tab-panel" role="tabpanel" id="panel-uni" aria-labelledby="tab-uni" hidden>
-          <div class="card">
-            <h3>East West University</h3>
-            <p class="meta">Department of Business Administration · 2025 – Present</p>
-            <ul>
-              <li>In my 6th semester with a 3.5 CGPA </li>
-              <li>Studying Accounting as a Major</li>
-              <li>Received the Merit Scholarship</li>
-            </ul>
-          </div>
-        </div>
       </div>
     </section>
 
     <!-- ====================================================== -->
-    <!-- 3. SKILLS: filter buttons + bars                        -->
+    <!-- 3. SKILLS: filter buttons + cards                        -->
     <!-- ====================================================== -->
     <section class="block" id="skills">
       <div class="wrap reveal">
@@ -373,6 +401,7 @@
             CERTIFICATES: upload your certificate file (PDF or photo) to GitHub next to index.html,
             then put its exact file name in href="...". Use file names with NO spaces,
             for example: web-design-certificate.pdf
+            Certificates open in a pop-up when a visitor clicks "View certificates".
             To add another certificate, copy one <li>...</li> line.
             No certificate yet? Use the line:  <p class="cert-empty">No certificate yet</p>
           -->
@@ -381,8 +410,8 @@
             <div class="top"><h3>Skill one</h3><span class="level">Intermediate</span></div>
             <p class="desc">Describe what you can actually do with this skill. For example: "I can build simple websites and fix common problems. I learned it through an online course and two small projects."</p>
             <div class="certs">
-              <p class="certs-title">Certificates</p>
-              <ul>
+              <button class="cert-btn" type="button"><span>View certificates <span class="count"></span></span><span aria-hidden="true">›</span></button>
+              <ul class="cert-list" hidden>
                 <li><a href="certificate-one.pdf" target="_blank" rel="noopener">Certificate name, Issuer, 2025</a></li>
                 <li><a href="certificate-two.pdf" target="_blank" rel="noopener">Another certificate, Issuer, 2024</a></li>
               </ul>
@@ -393,7 +422,6 @@
             <div class="top"><h3>Skill two</h3><span class="level">Beginner</span></div>
             <p class="desc">Say what you have done with it, how long you have practiced, and what you want to learn next.</p>
             <div class="certs">
-              <p class="certs-title">Certificates</p>
               <p class="cert-empty">No certificate yet</p>
             </div>
           </article>
@@ -402,7 +430,6 @@
             <div class="top"><h3>Teamwork</h3><span class="level">Strong</span></div>
             <p class="desc">Give a real example: a group project, a team, or a club where you worked with others and what the result was.</p>
             <div class="certs">
-              <p class="certs-title">Certificates</p>
               <p class="cert-empty">No certificate yet</p>
             </div>
           </article>
@@ -411,7 +438,6 @@
             <div class="top"><h3>Problem solving</h3><span class="level">Strong</span></div>
             <p class="desc">Describe a problem you solved and how you did it, even a small one.</p>
             <div class="certs">
-              <p class="certs-title">Certificates</p>
               <p class="cert-empty">No certificate yet</p>
             </div>
           </article>
@@ -420,7 +446,6 @@
             <div class="top"><h3>Bangla</h3><span class="level">Native</span></div>
             <p class="desc">Mother tongue. Fluent in speaking, reading and writing.</p>
             <div class="certs">
-              <p class="certs-title">Certificates</p>
               <p class="cert-empty">Not needed for a native language</p>
             </div>
           </article>
@@ -429,8 +454,8 @@
             <div class="top"><h3>English</h3><span class="level">Fluent</span></div>
             <p class="desc">Describe how you use English: studying, reading, writing, speaking with others.</p>
             <div class="certs">
-              <p class="certs-title">Certificates</p>
-              <ul>
+              <button class="cert-btn" type="button"><span>View certificates <span class="count"></span></span><span aria-hidden="true">›</span></button>
+              <ul class="cert-list" hidden>
                 <li><a href="english-certificate.pdf" target="_blank" rel="noopener">IELTS or other test, score, year</a></li>
               </ul>
             </div>
@@ -490,8 +515,19 @@
   </main>
 
   <footer>
-    <div class="wrap">© <span id="year">2026</span> Farhan Rahman, 2026.</div>
+    <div class="wrap">© <span id="year">2026</span> Farhan Rahman. Built with GitHub Pages.</div>
   </footer>
+
+  <!-- Pop-up that shows a skill's certificates -->
+  <dialog class="cert-dialog" id="cert-dialog" aria-labelledby="cert-dialog-title">
+    <div class="dialog-inner">
+      <div class="dialog-head">
+        <h3 id="cert-dialog-title">Certificates</h3>
+        <button class="dialog-close" type="button" aria-label="Close">&#10005;</button>
+      </div>
+      <ul class="dialog-list" id="cert-dialog-list"></ul>
+    </div>
+  </dialog>
 
   <!-- ============ INTERACTIVITY (no need to edit below) ============ -->
   <script>
@@ -533,6 +569,33 @@
           });
         });
       });
+    })();
+
+    // --- Certificates pop-up ---
+    (function () {
+      var dlg = document.getElementById("cert-dialog");
+      var buttons = document.querySelectorAll(".cert-btn");
+      if (!dlg || typeof dlg.showModal !== "function") {
+        // Very old browsers: just show the certificate lists directly
+        buttons.forEach(function (b) { b.hidden = true; });
+        document.querySelectorAll(".cert-list").forEach(function (l) { l.hidden = false; l.style.display = "grid"; });
+        return;
+      }
+      var title = document.getElementById("cert-dialog-title");
+      var list = document.getElementById("cert-dialog-list");
+      buttons.forEach(function (btn) {
+        var skill = btn.closest(".skill");
+        var items = skill.querySelectorAll(".cert-list li");
+        btn.querySelector(".count").textContent = "(" + items.length + ")";
+        btn.addEventListener("click", function () {
+          title.textContent = skill.querySelector("h3").textContent + " certificates";
+          list.innerHTML = "";
+          items.forEach(function (li) { list.appendChild(li.cloneNode(true)); });
+          dlg.showModal();
+        });
+      });
+      dlg.querySelector(".dialog-close").addEventListener("click", function () { dlg.close(); });
+      dlg.addEventListener("click", function (e) { if (e.target === dlg) dlg.close(); });
     })();
 
     // --- Experience: open and close ---
